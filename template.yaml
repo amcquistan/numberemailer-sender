@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  flask-email-api-serverless
+
+  Example project for sending an email via SendGrid and using templates stored in S3
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+  Api:
+    Cors:
+      AllowMethods: "'GET,HEAD,OPTIONS,PUT'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,X-Amz-Security-Token,Authorization,X-Api-Key,X-Requested-With,Accept,Access-Control-Allow-Methods,Access-Control-Allow-Origin,Access-Control-Allow-Headers'"
+      AllowOrigin: "'*'"
+
+Parameters:
+  CorsOrigins:
+    Type: String
+  SendGridKey:
+    Type: String
+  FromEmail:
+    Type: String
+  DBUrl:
+    Type: String
+
+Resources:
+  SendEmailSendGridDemoFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: rest_api/
+      Handler: app.app
+      Runtime: python3.8
+      Environment:
+        Variables:
+          DB_URL: !Ref DBUrl
+          ALLOWED_ORIGINS: !Ref CorsOrigins
+          SENDGRID_KEY: !Ref SendGridKey
+          FROM_EMAIL: !Ref FromEmail
+      Events:
+        SendEmailSendGridDemoAPI:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /send-number-email/
+            Method: post
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  SendEmailSendGridDemoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Send Email SendGrid Demo function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/send-number-email/"
+  SendEmailSendGridDemoFunction:
+    Description: "Send Email SendGrid Demo Function ARN"
+    Value: !GetAtt SendEmailSendGridDemoFunction.Arn
+  SendEmailSendGridDemoFunctionIamRole:
+    Description: "Implicit IAM Role created for Send Email SendGrid Demo function"
+    Value: !GetAtt SendEmailSendGridDemoFunctionRole.Arn

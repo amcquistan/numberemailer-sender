@@ -1,0 +1,5 @@
+flask-lambda
+boto3
+flask-cors
+sendgrid
+aws-psycopg2
