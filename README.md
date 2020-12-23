@@ -1,4 +1,4 @@
-# flask-email-api-serverless
+# numberemailer-sender
 
 Demo project for experimenting with SendGrid Email API. 
 
