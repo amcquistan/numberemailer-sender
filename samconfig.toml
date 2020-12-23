@@ -9,4 +9,3 @@ region = "us-east-2"
 profile = "ambassador"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "CorsOrigins=\"http://adam-random-number-emailer.s3-website.us-east-2.amazonaws.com\" SendGridKey=\"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\" FromEmail=\"adam.mcquistan@thecodinginterface.com\" DBUrl=\"not-yet\""
