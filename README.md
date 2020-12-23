@@ -5,7 +5,7 @@ Demo project for experimenting with SendGrid Email API.
 This project can be used on its own but, was originally conceived to work with the following peer projects:
 
 * [numberemailer-webhook](https://github.com/amcquistan/numberemailer-webhook) is a SAM Python / Flask REST API to be used as an Email Activity Webhook for SendGrid events
-* [numberemailer]() is a static HTML website designed to be hosted on AWS S3 static website bucket and integrated with Segment.io for page and click tracking as well as generating random numbers and sending those number to a user specified email address via the numberemailer-sender project utilizing SendGrid
+* [numberemailer](https://github.com/amcquistan/numberemailer) is a static HTML website designed to be hosted on AWS S3 static website bucket and integrated with Segment.io for page and click tracking as well as generating random numbers and sending those number to a user specified email address via the numberemailer-sender project utilizing SendGrid
 
 ## REST API Endpoint(s)
 
