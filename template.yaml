@@ -24,6 +24,14 @@ Parameters:
     Type: String
   DBUrl:
     Type: String
+  ExecEnv:
+    Type: String
+    AllowedValues:
+      - local
+      - dev
+      - stage
+      - prod
+    Default: prod
 
 Resources:
   SendEmailSendGridDemoFunction:
@@ -38,6 +46,7 @@ Resources:
           ALLOWED_ORIGINS: !Ref CorsOrigins
           SENDGRID_KEY: !Ref SendGridKey
           FROM_EMAIL: !Ref FromEmail
+          EXEC_ENV: !Ref ExecEnv
       Events:
         SendEmailSendGridDemoAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
