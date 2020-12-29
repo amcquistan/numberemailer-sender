@@ -1,14 +1,14 @@
-version: 0.1
+version: 0.2
 
 phases:
   install:
     commands:
       - mkdir /tmp/src/
       - mv $CODEBUILD_SRC_DIR/* /tmp/src/
-      - cd /tmp/src/
+      - cd /tmp/src/ && pwd && ls
       - pwd
-      - ls
-      - python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip==20.1.1 && pip install -r ./rest_api/requirements.txt && python -m pytest tests/ -v && deactivate && rm -rf venv
+      - ls -la
+      - python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip==20.1.1 && pip install -r rest_api/requirements.txt && python -m pytest tests/ -v && deactivate && rm -rf venv
       # install sam cli
       # add config vars from dashboard
       # - sam build
