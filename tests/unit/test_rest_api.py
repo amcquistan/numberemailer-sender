@@ -30,7 +30,7 @@ def test_send_number_email_email_contents(mocker, apigw_event_fixt, lambda_conte
 """
 
 @pytest.mark.event_json_file_name("./events/event_test_send_number_email.json")
-def test_send_number_email_email_contents(mocker, apigw_event_fixt, lambda_context):
+def test_send_number_email_email_contents(monkeypatch, apigw_event_fixt, lambda_context):
     monkeypatch.setenv("FROM_EMAIL", "test@west.com")
     monkeypatch.setenv("SENDGRID_KEY", "local")
     monkeypatch.setenv("EXEC_ENV", "local")
