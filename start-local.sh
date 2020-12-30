@@ -28,10 +28,16 @@ if [[ -z $CORS_ORIGINS ]]; then
   exit 1
 fi
 
+if [[ -z $EXEC_ENV ]]; then
+  echo "!!! Missing environment variable EXEC_ENV"
+  exit 1
+fi
+
 sam build --use-container
 
 sam local start-api --parameter-overrides \
   DBUrl=$DB_URL \
   SendGridKey=$SENDGRID_KEY \
   FromEmail=$FROM_EMAIL \
-  CorsOrigins=$CORS_ORIGINS
+  CorsOrigins=$CORS_ORIGINS \
+  ExecEnv=$EXEC_ENV

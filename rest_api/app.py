@@ -56,8 +56,8 @@ def send_number_email():
     )
 
     mail.add_custom_arg(CustomArg(key="custom_id", value=str(uuid.uuid4())))
-    # print(os.environ["AWS_SAM_LOCAL"])
-    if os.environ["AWS_SAM_LOCAL"] == "true":
+
+    if os.environ["EXEC_ENV"] == "local":
         #return the email
         return jsonify({"email": str(mail)})
     else:
@@ -69,7 +69,7 @@ def send_number_email():
 
 
 @app.route("/ping/")
-def send_number_email():
+def ping_pong():
     import random
     if random.random() > .5:
         message = "You scored a point"

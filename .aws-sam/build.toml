@@ -8,11 +8,4 @@ source_md5 = ""
 packagetype = "Zip"
 functions = ["SendEmailSendGridDemoFunction"]
 
-[function_build_definitions.4d6bb710-d61c-4cd9-b116-d0ca4b9dcf42]
-codeuri = "."
-runtime = "nodejs10.x"
-source_md5 = ""
-packagetype = "Zip"
-functions = ["beforeAllowTraffic", "afterAllowTraffic"]
-
 [layer_build_definitions]
