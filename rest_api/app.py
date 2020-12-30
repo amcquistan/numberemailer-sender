@@ -76,3 +76,16 @@ def ping_pong():
     else:
         message = "You lost the point"
     return jsonify({"pong": message})
+
+
+## Error route to test out deploy rollback if alarms start firing
+## Deploy new version then hit this endpoint to test rollback
+@app.route('/error/')
+def server_error():
+    throw_exception()
+
+def throw_exception():
+    raise ExpectedError
+
+class ExpectedError(Exception):
+    pass

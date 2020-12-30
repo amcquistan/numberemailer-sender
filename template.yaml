@@ -59,6 +59,11 @@ Resources:
           Properties:
             Path: /ping/
             Method: get
+        ErrorCheck:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /error/
+            Method: get
 #       DeploymentPreference:
 #         Type: Linear10PercentEvery1Minute
 #         Hooks:
@@ -134,6 +139,9 @@ Outputs:
   PingPongHealthCheck:
     Description: "API Gateway endpoint URL for Prod stage for health check"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping/"
+  ErrorCheck:
+    Description: "API Gateway endpoint URL for Prod stage to throw an exception and test rollback functionality"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/error/"
   SendEmailSendGridDemoFunction:
     Description: "Send Email SendGrid Demo Function ARN"
     Value: !GetAtt SendEmailSendGridDemoFunction.Arn
