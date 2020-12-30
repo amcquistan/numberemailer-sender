@@ -66,3 +66,13 @@ def send_number_email():
 
         # return status response
         return jsonify({"message": "Successful email push to SendGrid"})
+
+
+@app.route("/ping/")
+def send_number_email():
+    import random
+    if random.random() > .5:
+        message = "You scored a point"
+    else:
+        message = "You lost the point"
+    return jsonify({"pong": message})

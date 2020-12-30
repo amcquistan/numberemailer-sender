@@ -3,9 +3,9 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "numberemailer-sender"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-zez2v5ke4nzp"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-tujg7utm2u1n"
 s3_prefix = "numberemailer-sender"
-region = "us-east-2"
-profile = "ambassador"
+region = "us-west-2"
+profile = "default"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
