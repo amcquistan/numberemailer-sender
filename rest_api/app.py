@@ -56,8 +56,8 @@ def send_number_email():
     )
 
     mail.add_custom_arg(CustomArg(key="custom_id", value=str(uuid.uuid4())))
-
-    if os.environ["EXEC_ENV"] == "local":
+    # print(os.environ["AWS_SAM_LOCAL"])
+    if os.environ["AWS_SAM_LOCAL"] == "true":
         #return the email
         return jsonify({"email": str(mail)})
     else:

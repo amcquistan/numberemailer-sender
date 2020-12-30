@@ -33,7 +33,7 @@ def test_send_number_email_email_contents(mocker, apigw_event_fixt, lambda_conte
 def test_send_number_email_email_contents(monkeypatch, apigw_event_fixt, lambda_context):
     monkeypatch.setenv("FROM_EMAIL", "test@west.com")
     monkeypatch.setenv("SENDGRID_KEY", "local")
-    monkeypatch.setenv("EXEC_ENV", "local")
+    monkeypatch.setenv("AWS_SAM_LOCAL", "true")
 
     from rest_api import app as flask_app
     ret = flask_app.app(apigw_event_fixt, lambda_context)

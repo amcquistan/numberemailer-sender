@@ -34,4 +34,4 @@ sam local start-api --parameter-overrides \
   DBUrl=$DB_URL \
   SendGridKey=$SENDGRID_KEY \
   FromEmail=$FROM_EMAIL \
-  CorsOrigins=$ALLOWED_ORIGINS
+  CorsOrigins=$CORS_ORIGINS
