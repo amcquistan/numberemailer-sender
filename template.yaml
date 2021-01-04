@@ -74,13 +74,13 @@ Resources:
       DeploymentPreference:
         Type: Linear10PercentEvery1Minute
         Hooks:
-          PreTraffic: !Ref beforeAllowTraffic
-          PostTraffic: !Ref afterAllowTraffic
-  beforeAllowTraffic:
+          PreTraffic: !Ref BeforeAllowTraffic
+          PostTraffic: !Ref AfterAllowTraffic
+  BeforeAllowTraffic:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest_api/
-      Handler: beforeAllowTraffic.lambda_handler
+      Handler: BeforeAllowTraffic.lambda_handler
       Policies:
         - Version: "2012-10-17"
           Statement: 
@@ -107,11 +107,11 @@ Resources:
           NewVersion: !Ref SendEmailSendGridDemoFunction.Version
           
 # Specifies the AfterAllowTraffic lifecycle hook Lambda function
-  afterAllowTraffic:
+  AfterAllowTraffic:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest_api/
-      Handler: afterAllowTraffic.lambda_handler
+      Handler: AfterAllowTraffic.lambda_handler
       Policies:
         - Version: "2012-10-17"
           Statement: 
