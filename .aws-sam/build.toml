@@ -6,6 +6,6 @@ codeuri = "rest_api/"
 runtime = "python3.8"
 source_md5 = ""
 packagetype = "Zip"
-functions = ["SendEmailSendGridDemoFunction", "BeforeAllowTraffic", "AfterAllowTraffic"]
+functions = ["SendEmailSendGridDemoFunction", "beforeAllowTraffic", "afterAllowTraffic"]
 
 [layer_build_definitions]
