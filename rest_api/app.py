@@ -66,3 +66,27 @@ def send_number_email():
 
         # return status response
         return jsonify({"message": "Successful email push to SendGrid"})
+
+
+@app.route("/ping/")
+def ping_pong():
+    import random
+    if random.random() > .5:
+        message = "You scored a point"
+    else:
+        message = "You lost the point"
+    return jsonify({"pong": message})
+
+
+## Error route to test out deploy rollback if alarms start firing
+## Deploy new version then hit this endpoint to test rollback
+@app.route('/error/')
+def server_error():
+    print("Raising error to test error handling")
+    throw_exception()
+
+def throw_exception():
+    raise ExpectedError
+
+class ExpectedError(Exception):
+    pass
