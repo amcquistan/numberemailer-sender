@@ -20,5 +20,4 @@ artifacts:
   files:
     # list of local files relative to this build environment that will be added to the final artifact (zip)
     - /tmp/src/packaged.yaml
-    - /tmp/src/template.yaml
   discard-paths: yes

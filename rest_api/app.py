@@ -36,10 +36,6 @@ def db_connection():
 
 @app.route("/send-number-email/", methods=("POST",))
 def send_number_email():
-    '''
-    Test to send the email to trigger webhook
-    '''
-    x = 5 # AWS issue https://github.com/serverless/serverless/issues/8392
     data = request.get_json()
     num = data["number"]
     to_email = data["to_email"]
