@@ -1,12 +1,16 @@
 import os
-import boto3
+
 from flask import request, jsonify, json, render_template_string, current_app
 from flask_lambda import FlaskLambda
 from flask_cors import CORS
 import sendgrid
 from sendgrid.helpers.mail import Mail, CustomArg
-import uuid
-import psycopg2
+
+import requests
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 app = FlaskLambda(__name__)
 
@@ -20,49 +24,62 @@ CORS(
 sg = sendgrid.SendGridAPIClient(api_key=os.environ["SENDGRID_KEY"])
 
 
-def db_connection():
-    from urllib.parse import urlparse
-    result = urlparse(os.environ["DB_URL"])
-
-    username = result.username
-    password = result.password
-    database = result.path[1:]
-    hostname = result.hostname
-
-    return psycopg2.connect(
-        dbname=database, user=username, password=password, host=hostname
-    )
-
-
 @app.route("/send-number-email/", methods=("POST",))
 def send_number_email():
+    logger.info({
+        'resource': 'numberemailer-sender',
+        'operation': 'send_number_email'
+    })
     data = request.get_json()
     num = data["number"]
-    to_email = data["to_email"]
+    to_emails = data["to_emails"].split('\n')
+    submission_id = None
+    try:
+        url = os.environ['SUBMISSION_URL']
+        api_key = os.environ['SUBMISSION_APIKEY']
+        resp = requests.post(url, json={'recipient_count': len(to_emails)}, headers={'X-API-Key': api_key})
+        if resp.status_code == 201:
+            resp_data = resp.json()
+            submission_id = resp_data['submission_id']
+        logger.info({
+            'resource': 'numberemailer-sender',
+            'operation': 'send_number_email',
+            'details': {
+                'action': 'Fetched submission_id',
+                'submission_id': submission_id,
+                'api-key': api_key
+            }
+        })
+    except Exception as e:
+        logger.error({
+            'message': 'Error fetching submission_id',
+            'error': str(e),
+            'details': {
+                'recipient_count': len(to_emails)
+            }
+        })
+        return jsonify('failed to fetch submission_id'), 404
 
     # fetch email template from S3
     # - maybe figure this out later as its unneeded for this demo
 
     # render email template with number
     email_body = render_template_string(
-        "Hello {{ email }} your generated number was {{ num }}", email=to_email, num=num
+        "<html><h1>Hello Friend,</h1><p>Your randomly generated number was {{ num }}.</p><p>Enjoy!</p></html>",
+        num=num
     )
 
     mail = Mail(
         from_email=os.environ["FROM_EMAIL"],
-        to_emails=[to_email],
-        subject="Flask SendGrid Demo: Random Number Generated",
-        plain_text_content=email_body,
+        to_emails=to_emails,
+        subject="SendGrid Demo / Random Number Generating Emailer",
+        html_content=email_body,
     )
 
-    mail.add_custom_arg(CustomArg(key="custom_id", value=str(uuid.uuid4())))
+    mail.add_custom_arg(CustomArg(key="submission_id", value=int(submission_id)))
 
-    if os.environ["EXEC_ENV"] == "local":
-        #return the email
-        return jsonify({"email": str(mail)})
-    else:
-        # send email to SendGrid API passing it the template
-        sg.client.mail.send.post(request_body=mail.get())
+    # send email to SendGrid API passing it the template
+    sg.client.mail.send.post(request_body=mail.get())
 
-        # return status response
-        return jsonify({"message": "Successful email push to SendGrid"})
+    # return status response
+    return jsonify({"message": "Successful email push to SendGrid", "submission_id": submission_id})
