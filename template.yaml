@@ -8,7 +8,8 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 20
+    Timeout: 60
+    AutoPublishAlias: live
   Api:
     Cors:
       AllowMethods: "'GET,HEAD,OPTIONS,PUT'"
@@ -22,8 +23,6 @@ Parameters:
     Type: String
   FromEmail:
     Type: String
-  DBUrl:
-    Type: String
   ExecEnv:
     Type: String
     AllowedValues:
@@ -32,6 +31,13 @@ Parameters:
       - stage
       - prod
     Default: prod
+  SubmissionEndpoint:
+    Type: String
+    Description: The ECS Submission Endpoint
+  SubmissionApiKey:
+    Type: String
+    Description: The ECS API Key
+
 
 Resources:
   SendEmailSendGridDemoFunction:
@@ -40,19 +46,32 @@ Resources:
       CodeUri: rest_api/
       Handler: app.app
       Runtime: python3.8
+      Policies:
+        - VPCAccessPolicy: {}
       Environment:
         Variables:
-          DB_URL: !Ref DBUrl
           ALLOWED_ORIGINS: !Ref CorsOrigins
           SENDGRID_KEY: !Ref SendGridKey
           FROM_EMAIL: !Ref FromEmail
           EXEC_ENV: !Ref ExecEnv
+          SUBMISSION_URL: !Ref SubmissionEndpoint
+          SUBMISSION_APIKEY: !Ref SubmissionApiKey
       Events:
         SendEmailSendGridDemoAPI:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /send-number-email/
             Method: post
+
+  SendEmailSendGridDemoFnLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+        Fn::Join:
+          - ''
+          - - /aws/lambda/
+            - Ref: SendEmailSendGridDemoFunction
+      RetentionInDays: 14
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

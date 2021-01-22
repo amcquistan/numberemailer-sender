@@ -23,7 +23,7 @@ URI: /send-number-email/
 ```
 {
   number: integer,
-  to_email: string
+  to_emails: string
 }
 ```
 
